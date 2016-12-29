@@ -148,6 +148,58 @@ Node* initialList() {
     return list;
 }
 
+Node* circularLinkedList() {
+    Node *list = new Node;
+    list->data = 1;
+    list->next = NULL;
+
+    appendNode (list, 2);  appendNode (list, 3);  appendNode (list, 4);
+    appendNode (list, 5);  appendNode (list, 6);  appendNode (list, 7);
+    appendNode (list, 8);  appendNode (list, 9);  appendNode (list, 10);
+    appendNode (list, 11);
+    Node* Node4 = searchNode(list, 4);
+    Node* Node11 = searchNode(list, 11);
+    Node11->next = Node4;
+    return list;
+}
+
+Node* circularStart (Node* head) {
+    if (head == NULL) return NULL;
+
+    Node* runner1 = head;
+    Node* runner2 = head;
+
+    while (runner1 && runner2) {
+        runner1 = runner1->next;
+        runner2 = runner2->next;
+
+        if (runner2) {
+            // runner2 is 2 times faster than runner 1
+            runner2 = runner2->next;
+            if (runner2 == NULL) {
+                return NULL;
+            }
+        } else {
+            return NULL;
+        }
+
+        // std::cout << runner1->data << "\t,\t" << runner2->data << std::endl;
+        if (runner1 == runner2) {
+            break;
+        }
+    }
+
+    /* Move n1 to Head. Keep n2 at Meeting Point. Each are k steps
+     * from the Loop Start. If they move at the same pace, they must
+     * meet at Loop Start. */
+    runner1 = head;
+    while (runner1 != runner2) {
+        runner1 = runner1->next;
+        runner2 = runner2->next;
+    }
+    return runner1;
+}
+
 TEST(LinkedList, Print) {
     Node *list = initialList();
     EXPECT_EQ("12345", print(list));
@@ -216,3 +268,14 @@ TEST(LinkedList, DeleteDuplicates) {
     deleteDuplicates(list);
     EXPECT_EQ("1234", print(list));
 }
+
+TEST(LinkedList, CircularLinkedList) {
+    Node *nonCircular = initialList();
+    EXPECT_EQ("12345", print(nonCircular));
+    EXPECT_EQ(NULL, circularStart(nonCircular));
+
+    Node *circular = circularLinkedList();
+    Node* circularHead = circularStart(circular);
+    EXPECT_EQ(4, circularHead->data);
+}
+
