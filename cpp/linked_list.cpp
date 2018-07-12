@@ -28,6 +28,24 @@ void appendNode(Node *head, int data) {
     }
 }
 
+void insertSortedNode(Node** head, int data) {
+    Node *newNode = new Node;
+    newNode->data = data;
+    newNode->next = NULL;
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Node* current = *head;
+        Node* previous = NULL;
+        while(current && current->data < data) {
+            previous = current;
+            current = current->next;
+        }
+        previous->next = newNode;
+        newNode->next = current;
+    }
+}
+
 std::string print(Node *node) {
     std::string statement = "";
     while (node) {
@@ -243,6 +261,14 @@ TEST(LinkedList, DeleteNode) {
     EXPECT_TRUE(deleteNode(&list, 4));
     EXPECT_EQ("", print(list));
     EXPECT_FALSE(deleteNode(&list, 3));
+}
+
+TEST(LinkedList, InsertSortedNode) {
+    Node *list = initialList();
+    deleteNode(&list, 3);
+    EXPECT_EQ("1245", print(list));
+    insertSortedNode(&list, 3);
+    EXPECT_EQ("12345", print(list));
 }
 
 TEST(LinkedList, DeleteDuplicates) {

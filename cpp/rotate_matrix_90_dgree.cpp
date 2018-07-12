@@ -1,5 +1,5 @@
 // To run the program, try the command below:
-// g++ rotate_matrix.cpp -lgtest_main -lgtest
+// g++ rotate_matrix_90_degree.cpp -lgtest_main -lgtest
 
 // rotate a matrix 90 degree
 
